@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlaskApp</title>
+</head>
+<body>
+<script>
+const reloadImg = url =>
+      fetch(url, { cache: 'reload', mode: 'no-cors' })
+      .then(() => document.body.querySelectorAll(`img[src='${url}']`)
+                  .forEach(img => img.src = url));
+setInterval(function(){
+    var images = document.getElementsByTagName('img');
+    for(i=0; i < images.length; i++){
+        reloadImg(images[i].src);
+    }
+}, 3000);
+</script>
+    <table>
+        <tr>
+            {% for k in chargers[0].keys() %}
+                <th>{{k}}</th>
+            {% endfor %}
+        </tr>
+        {% for r in chargers %}
+            <tr>
+            {% for v in r.values() %}
+                <th>{{v}}</th>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    {% for i in images %}
+        <img src="{{i}}" height="270" width="480" />
+    {% endfor %}
+</body>
+</html>
+
