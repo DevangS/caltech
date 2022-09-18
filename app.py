@@ -1,5 +1,5 @@
 import requests
-from flask import Flask, render_template, redirect, Response
+from flask import Flask, render_template, redirect, Response, send_file
 
 app = Flask(__name__)
 
@@ -21,6 +21,8 @@ def image(image_id):
         headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
         response = Response(resp.content, resp.status_code, headers)
         return response
+    elif image_id == 'favicon.ico':
+        return send_file('images/favicon.gif')
 
 
 def get_chargers():
