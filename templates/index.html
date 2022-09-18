@@ -15,7 +15,7 @@ setInterval(function(){
     for(i=0; i < images.length; i++){
         reloadImg(images[i].src);
     }
-}, 3000);
+}, 5000);
 </script>
     <table>
         <tr>
@@ -32,7 +32,7 @@ setInterval(function(){
         {% endfor %}
     </table>
     {% for i in images %}
-        <img src="{{i}}" height="270" width="480" />
+        <img src="/images/{{i}}" height="270" width="480" />
     {% endfor %}
 </body>
 </html>

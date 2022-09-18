@@ -1,13 +1,26 @@
 import requests
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, Response
 
 app = Flask(__name__)
+
+IMAGE_ORIGIN = 'http://caltech.powerflex.com:8510'
+images = ['acc5cam0%s' % i for i in range(6, 8)]
 
 
 @app.route('/')
 def main():
-    images = ['http://caltech.powerflex.com:8510/acc5cam0%s' % i for i in range(6, 8)]
     return render_template('index.html', chargers=list(get_chargers()), images=images)
+
+
+@app.route('/images/<image_id>')
+def image(image_id):
+    if image_id in images:
+        url = '%s/%s' % (IMAGE_ORIGIN, image_id)
+        resp = requests.get(url)
+        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
+        response = Response(resp.content, resp.status_code, headers)
+        return response
 
 
 def get_chargers():
