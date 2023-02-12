@@ -1,6 +1,6 @@
 # fly.toml file generated for bitter-violet-2919 on 2022-09-14T13:57:35-07:00
 
-app = "bitter-violet-2919"
+app = "caltech"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
