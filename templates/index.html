@@ -18,20 +18,24 @@ setInterval(function(){
     }
 }, 5000);
 </script>
-    <table>
-        <tr>
-            {% for k in chargers[0].keys() %}
-                <th>{{k}}</th>
-            {% endfor %}
-        </tr>
-        {% for r in chargers %}
+    {% if chargers|length > 0 %}
+        <table>
             <tr>
-            {% for v in r.values() %}
-                <th>{{v}}</th>
-            {% endfor %}
+                {% for k in chargers[0].keys() %}
+                    <th>{{k}}</th>
+                {% endfor %}
             </tr>
-        {% endfor %}
-    </table>
+            {% for r in chargers %}
+                <tr>
+                {% for v in r.values() %}
+                    <th>{{v}}</th>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+    <p>Couldn't fetch charging details</p>
+    {% endif %}
     {% for i in images %}
         <img src="/images/{{i}}" height="270" width="480" />
     {% endfor %}
