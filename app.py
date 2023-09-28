@@ -13,11 +13,19 @@ def main():
     return render_template('index.html', chargers=list(get_chargers()), images=images)
 
 
+@app.route('/healthcheck')
+def healthcheck():
+    return 'OK'
+
+
 @app.route('/images/<image_id>')
 def image(image_id):
     if image_id in images:
         url = '%s/%s' % (IMAGE_ORIGIN, image_id)
-        resp = requests.get(url)
+        try:
+            resp = requests.get(url, timeout=5)
+        except requests.exceptions.Timeout:
+            return Response(status=503)
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
         headers = [(name, value) for (name, value) in resp.raw.headers.items() if name.lower() not in excluded_headers]
         response = Response(resp.content, resp.status_code, headers)
@@ -30,8 +38,21 @@ def get_plugshare(location_id=352230):
     location_template = 'https://api.plugshare.com/v3/locations/%s'
     basic = HTTPBasicAuth('basic', 'd2ViX3YyOkVOanNuUE54NHhXeHVkODU=')
     s = requests.Session()
-    s.get('https://plugshare.com', auth=basic)
+    rsp = s.get('https://plugshare.com', auth=basic)
     print(s.cookies.get_dict())
+    print(rsp.content)
+
+
+def get_chargers_ev_api():
+    try:
+        r = requests.get(
+            'https://ev.caltech.edu/api/v1/sessions/caltech',
+            auth=('VDd2diw1r5ek7sPGmx4PvNVLaWeUXew2YPZw4SHyH5k', '')
+        )
+        print(r.json())
+    except Exception as e:
+        print(e)
+
 
 def get_chargers():
     try:
@@ -45,7 +66,3 @@ def get_chargers():
     except Exception as e:
         print(e)
         return []
-
-
-if __name__ == '__main__':
-    get_plugshare()
